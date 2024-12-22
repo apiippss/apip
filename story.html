@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>gatau judulnya apa yg penting tau</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-image: url('file:///C:/Users/user/OneDrive/文档/index.html/crito/iyo.jpg');
+            background-size: cover;
+            background-position: center;
+            color: #333;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+        }
+        #rainCanvas {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none; /* Agar tidak mengganggu interaksi dengan elemen lain */
+}
+        
+        .container {
+            text-align: center;
+            border: 2px solid #333;
+            padding: 20px;
+            border-radius: 10px;
+            background-color: rgba(255, 255, 255, 0.8);
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+            transition: opacity 0.5s ease;
+        }
+        .fade-out {
+            opacity: 0;
+            transition: opacity 0.2s ease;
+        }
+
+        .fade-in {
+            opacity: 1;
+            transition: opacity 0.2s ease;
+        }
+        .button-container {
+            margin-top: 20px;
+        }
+        button {
+            padding: 10px 20px;
+            margin: 0 10px;
+            border: none;
+            border-radius: 5px;
+            background-color: #3f4041;
+            color: white;
+            cursor: pointer;
+            transition: transform 0.2s;
+        }
+        button:hover {
+            background-color: #01060b;
+        }
+        button:active {
+            transform: scale(0.95);
+        }
+    </style>
+</head>
+<body>
+    <canvas id="rainCanvas"></canvas>
+    <div class="container" id="story-container">
+        <h1 id="story-title">A Heartbreaking Tale</h1>
+        <p id="story-text">In a small town, a young girl named Lily dreamed of becoming a doctor.</p>
+        <div class="button-container">
+            <audio id="background-music" src="Cry - Cigarettes After Sex [3XqqkrJENB4].mp3" loop></audio>
+            <button id="prev-button" onclick="prevStory()">Previous</button>
+            <button id="play-button" onclick="playAudio()">Play</button>
+            <button id="next-button" onclick="nextStory()">Next</button>
+        </div>
+        <canvas id="rainCanvas"></canvas>
+    </div>
+
+    <script>
+        const stories = [
+            {
+                title: "awal ketemu",
+                text: "pada pertengahan tahun 2021 tepat nya bulan mei pada tanggal 14 mei 2021 (tangal ulang tahun ku btw) aku bertemu dengan cewek bernama cherissa aurelya putri dia cantik,baik,manja,cemburuan,moodyan,dll. Aku ingat dai pertama kali manggil aku dengan sebutan onichan emang kedengaran nya kekanak kanak an hahaha."
+            },
+            {
+                title: "pertengahan juni 2021",
+                text: "pada bulan itu aku nembak dia karena dia adalah cewek yang menurut ku lucu aja soalnya pertama kali aku mendapati cewe yang seperti itu lalu aku sama dia pun mulai lah jalan jalan yaa deket deket aja dulu sampe akhir nya ada kabar kalau dia mau pindah ke daerah gersik akhirnya dia bikin janji ke aku kalau sebelum pinda mau pamitan dulu di tempat awal ketemu dulu."
+            },
+            {
+                title: "awal masalah",
+                text: "Aku yang gatau kalau dia strict parents anjayyy pada waktu itu aku di chat sama mama nya, kalau tidak salah ingat mama nya itu dulu kaya maki maki aku ,ngeremeh in aku kalau itu ke aku sih gamasalah tapi ngeremehin nya loh yang bikin sakit hati."
+            },
+            {
+                title: "awal putus",
+                text: "pada awal bulan desember mama nya ngirim lagi vn lewat hp nya aurel  kalau gak salah inget juga mama nya itu ngomong gini (kalau gak ngejauhin aurel , aurel yang malah tak pukulin (ini aku rahasiain dari siapa siapa))aku yang gamau aurel kenapa napa akhirnya mutusin buat sedikit ngejauhin dia tapi sepertinya dia salah paham dan mengira aku udah benci sama dia. Akhirnya, pada tanggal 14 Desember 2021, aku memutuskan untuk mengakhiri hubungan kami. Rasanya sangat berat, tapi aku merasa itu adalah keputusan yang terbaik untuk kami berdua."
+
+            },
+            {
+                title: "setelah putus",
+                text: "Setelah putus, aku merasa sangat kehilangan. Setiap hari aku teringat kenangan indah bersama dia. Kami pernah berbagi banyak momen, dari tertawa hingga menangis bersama. Namun, aku tahu bahwa kadang-kadang, hal-hal tidak berjalan sesuai rencana. Aku berharap dia bisa bahagia bersama yang baru, dia, juga sekarang sudah bersama temen angkatan nya di smp nya bernama napis. maap gabisa jelasin secara spesifik soalnya aku gabisa gatau knp"
+            },
+        ];
+
+        let currentStoryIndex = 0;
+
+        function nextStory() {
+    if (currentStoryIndex < stories.length - 1) {
+        // Tambahkan kelas fade-out
+        const storyContainer = document.getElementById("story-container");
+        storyContainer.classList.add("fade-out");
+
+        // Tunggu hingga animasi selesai sebelum memperbarui cerita
+        setTimeout(() => {
+            currentStoryIndex++;
+            updateStory();
+        }, 200); // Waktu yang sama dengan durasi animasi fade-out
+    }
+}
+
+function prevStory() {
+    if (currentStoryIndex > 0) {
+        // Tambahkan kelas fade-out
+        const storyContainer = document.getElementById("story-container");
+        storyContainer.classList.add("fade-out");
+
+        // Tunggu hingga animasi selesai sebelum memperbarui cerita
+        setTimeout(() => {
+            currentStoryIndex--;
+            updateStory();
+        }, 200); // Waktu yang sama dengan durasi animasi fade-out
+    }
+}
+
+function updateStory() {
+    const storyContainer = document.getElementById("story-container");
+    const storyTitle = document.getElementById("story-title");
+    const storyText = document.getElementById("story-text");
+
+    // Memperbarui konten cerita
+    storyTitle.textContent = stories[currentStoryIndex].title;
+    storyText.textContent = stories[currentStoryIndex].text;
+
+    // Hapus kelas fade-out dan tambahkan fade-in
+    storyContainer.classList.remove("fade-out");
+    storyContainer.classList.add("fade-in");
+}
+        function playAudio() {
+    const audio = document.getElementById("background-music");
+    audio.currentTime = 74; // Set audio to start at 1:14 (74 seconds)
+    audio.play().catch(error => {
+        console.error("Error playing audio:", error);
+    });
+}
+        // Memperbarui tampilan cerita saat halaman dimuat
+        updateStory();
+
+        const canvas = document.getElementById('rainCanvas');
+const ctx = canvas.getContext('2d');
+
+canvas.width = window.innerWidth;
+canvas.height = window.innerHeight;
+
+let raindrops = [];
+
+// Membuat tetesan hujan
+function createRaindrop() {
+    const x = Math.random() * canvas.width;
+    const y = Math.random() * canvas.height;
+    const length = Math.random() * 20 + 10; // Panjang tetesan
+    const speed = Math.random() * 5 + 2; // Kecepatan jatuh
+    raindrops.push({ x, y, length, speed });
+}
+
+// Mengupdate posisi tetesan hujan
+function updateRaindrops() {
+    for (let i = 0; i < raindrops.length; i++) {
+        const drop = raindrops[i];
+        drop.y += drop.speed;
+
+        // Jika tetesan sudah melewati bagian bawah kanvas, reset ke atas
+        if (drop.y > canvas.height) {
+            drop.y = 0;
+            drop.x = Math.random() * canvas.width;
+        }
+    }
+}
+
+// Menggambar tetesan hujan
+function drawRaindrops() {
+    ctx.clearRect(0, 0, canvas.width, canvas.height); // Menghapus kanvas
+    ctx.strokeStyle = 'rgba(174, 194, 224, 0.5)'; // Warna tetesan
+    ctx.lineWidth = 2;
+
+    for (let drop of raindrops) {
+        ctx.beginPath();
+        ctx.moveTo(drop.x, drop.y);
+        ctx.lineTo(drop.x, drop.y + drop.length);
+        ctx.stroke();
+    }
+}
+
+// Fungsi utama untuk animasi
+
+
+// Memulai animasi
+animate();
+    </script>
+</body>
+</html>
